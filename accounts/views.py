@@ -1,5 +1,6 @@
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.http import Http404
+from django.db import transaction
+from django.http import Http404, HttpResponse
 from django.shortcuts import render
 
 # Create your views here.
@@ -77,3 +78,69 @@ class UserListView(ListView):
     # 获取页面的参数（当期第几页）
     page_kwarg = 'p'
 
+
+def user_register(request):
+    """ 用户注册 """
+    # 1. 获取表单的数据
+    # 2. 验证数据是否符合要求
+    # 3. 添加用户信息（用户基本信息、详细信息）
+    username = '13000000002'
+    try:
+        user = User.objects.create(username=username,
+                                   password='123456',
+                                   nickname='王五')
+        # profile = UserProfile.objects.create(user=user, username=username)
+        profile = UserProfile.objects.create(user=user, usernamex=username)
+        # 4. 反馈结果:成功/失败
+        return HttpResponse('ok')
+    except Exception as e:
+        user.delete()
+        print(e)
+        return HttpResponse('no')
+
+
+# 装饰器作用:如果上传上去的事务不满足数据库的要求，则不新建并回滚
+@transaction.atomic()
+def user_signup_trans(request):
+    """ 事务的使用-装饰器 """
+    username = '13000000003'
+    user = User.objects.create(username=username,
+                               password='123456',
+                               nickname='王五')
+    profile = UserProfile.objects.create(user=user, usernamex=username)
+    return HttpResponse('ok')
+
+
+def user_signup_trans_with(request):
+    """ 事务的使用-with语法"""
+    with transaction.atomic():
+        username = '13000000005'
+        user = User.objects.create(username=username,
+                                   password='123456',
+                                   nickname='王五')
+        profile = UserProfile.objects.create(user=user, username=username)
+    return HttpResponse('ok')
+
+
+# @transaction.atomic()
+def user_signup_trans_hand(request):
+    """ 事务的自动提交 """
+    username = '13000000007'
+    # 放弃自动提交事务
+    transaction.set_autocommit(False)
+    try:
+        user = User.objects.create(username=username,
+                                   password='123456',
+                                   nickname='王五')
+        profile = UserProfile.objects.create(user=user, username=username)
+        # profile = UserProfile.objects.create(user=user, usernamex=username)
+        # 手动提交事务
+        transaction.commit()
+        # 4. 反馈结果:成功/失败
+        return HttpResponse('ok')
+    except Exception as e:
+        # user.delete()
+        print(e)
+        # 手动控制事务，实现回滚
+        transaction.rollback()
+        return HttpResponse('no')
