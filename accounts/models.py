@@ -33,7 +33,6 @@ class User(CommonModel):
     class Meta:
         db_table = 'accounts_user'
 
-
 class UserProfile(CommonModel):
     """ 用户详细信息 """
     SEX_CHOICES = (
