@@ -6,6 +6,7 @@ from django.shortcuts import render
 # Create your views here.
 from django.views.generic import ListView
 
+from accounts.forms import LoginForm, UserEditForm
 from accounts.models import User, UserProfile
 
 
@@ -144,3 +145,34 @@ def user_signup_trans_hand(request):
         # 手动控制事务，实现回滚
         transaction.rollback()
         return HttpResponse('no')
+
+
+def user_login(request):
+    """ 用户登录 """
+    # form = LoginForm()
+    # return render(request, 'user_login.html', {
+    #     'form': form
+    # })
+    if request.method == 'POST':
+        form = LoginForm(request.POST)
+        if form.is_valid():
+            data = form.cleaned_data
+            print('data:', data)
+    else:
+        form = LoginForm()
+    return render(request, 'user_login.html', {
+        'form': form
+    })
+
+
+def user_edit(request):
+    """ 用户信息维护 """
+    if request.method == 'POST':
+        form = UserEditForm(data=request.POST)
+        if form.is_valid():
+            print('表单通过验证')
+    else:
+        form = UserEditForm()
+    return render(request, 'user_edit.html', {
+        'form': form
+    })

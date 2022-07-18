@@ -11,4 +11,9 @@ urlpatterns = [
     path('user/signup/trans/', views.user_signup_trans, name='user_signup_trans'),
     path('user/signup/with/', views.user_signup_trans_with, name='user_signup_trans_with'),
     path('user/signup/hand/', views.user_signup_trans_hand, name='user_signup_trans_hand'),
+    # 用户登录表单
+    path('user/login/', views.user_login, name='user_login'),
+    # 用户信息维护
+    path('user/edit/', views.user_edit, name='user_edit'),
+
 ]
