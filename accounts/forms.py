@@ -76,3 +76,12 @@ class UserRegForm(forms.Form):
     password = forms.CharField(label='密码', max_length=200, min_length=3, widget=forms.PasswordInput)
     nickname = forms.CharField(label='用户昵称', max_length=32, required=False)
     birth_day = forms.DateField(label='用户的生日', required=True)
+
+
+class UserChangeForm(forms.ModelForm):
+    """ 从模型创建表单 -- 用户基本信息修改 """
+
+    class Meta:
+        model = User
+        # fields = ('username', 'password', 'nickname', 'avatar')
+        exclude = ('status',)
