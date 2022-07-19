@@ -149,15 +149,10 @@ def user_signup_trans_hand(request):
 
 def user_login(request):
     """ 用户登录 """
-    # form = LoginForm()
-    # return render(request, 'user_login.html', {
-    #     'form': form
-    # })
     if request.method == 'POST':
-        form = LoginForm(request.POST)
+        form = LoginForm(data=request.POST)
         if form.is_valid():
-            data = form.cleaned_data
-            print('data:', data)
+            print('表单验证通过')
         else:
             print(form.errors)
     else:

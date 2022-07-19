@@ -7,12 +7,19 @@
 <body>
 
 <h3>用户登入</h3>
-<form action="." method="post">
-    {% csrf_token %}
-    {{ form.username.label }}
-    {{ form.username }}
-    {{ form.username.errors }}
-    <input type="submit" value="登入">
-</form>
+<div>
+    <form action="." method="post">
+        {% csrf_token %}
+        {{ form.username.label }}
+        {{ form.username }}
+        {{ form.username.errors }}
+        {{ form.password.label }}
+        {{ form.password }}
+        {{ form.password.errors }}
+        <input type="submit" value="登入">
+        {{ form.non_field_errors }}
+    </form>
+</div>
+
 </body>
 </html>
