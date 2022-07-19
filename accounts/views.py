@@ -6,7 +6,7 @@ from django.shortcuts import render
 # Create your views here.
 from django.views.generic import ListView
 
-from accounts.forms import LoginForm, UserEditForm
+from accounts.forms import LoginForm, UserEditForm, UserRegForm
 from accounts.models import User, UserProfile
 
 
@@ -158,6 +158,8 @@ def user_login(request):
         if form.is_valid():
             data = form.cleaned_data
             print('data:', data)
+        else:
+            print(form.errors)
     else:
         form = LoginForm()
     return render(request, 'user_login.html', {
@@ -176,3 +178,30 @@ def user_edit(request):
     return render(request, 'user_edit.html', {
         'form': form
     })
+
+
+def user_reg(request):
+    """用户注册"""
+    # form = UserRegForm()
+    # return render(request, 'user_reg.html', {
+    #     'form': form,
+    # })
+    if request.method == 'POST':
+        form = UserRegForm(data=request.POST, files=request.FILES)
+        # 验证表单是否已经验证
+        if form.is_valid():
+            form_data = form.cleaned_data
+            print('验证通过后的数据：', form_data)
+        else:
+            print(form.errors)
+    else:
+        # 表单初始化的数据
+        initial_data = {
+            'nickname': '默认昵称',
+            'birth_day': '2000-1-1',
+        }
+        form = UserRegForm(initial=initial_data)
+    return render(request, 'user_reg.html',
+                  {
+                      'form': form,
+                  })

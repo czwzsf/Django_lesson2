@@ -15,5 +15,7 @@ urlpatterns = [
     path('user/login/', views.user_login, name='user_login'),
     # 用户信息维护
     path('user/edit/', views.user_edit, name='user_edit'),
+    # 用户注册表单
+    path('user/reg/', views.user_reg, name='user_reg'),
 
 ]
